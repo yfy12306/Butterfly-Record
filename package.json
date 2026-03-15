@@ -1,0 +1,33 @@
+{
+  "name": "butterfly-collection-manager",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:push": "node scripts/init-db.mjs",
+    "db:seed": "node prisma/seed.mjs",
+    "setup": "npm.cmd run db:generate && npm.cmd run db:push && npm.cmd run db:seed"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.7.0",
+    "date-fns": "^4.1.0",
+    "next": "^15.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
+    "prisma": "^6.7.0",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}

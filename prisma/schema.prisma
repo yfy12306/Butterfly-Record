@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum RegionLevel {
+  country
+  province
+  city
+}
+
+enum RecordStatus {
+  confirmed
+  pending_identification
+  observed
+}
+
+enum ImportExportType {
+  import_species
+  import_distribution
+  import_records
+  export_all
+  backup_database
+}
+
+model Species {
+  id                String                      @id @default(cuid())
+  chineseName       String
+  scientificName    String                      @unique
+  family            String
+  genus             String
+  orderName         String?                     @default("鳞翅目")
+  subfamily         String?
+  description       String?
+  notes             String?
+  createdAt         DateTime                    @default(now())
+  updatedAt         DateTime                    @updatedAt
+  aliases           SpeciesAlias[]
+  distributions     SpeciesRegionDistribution[]
+  records           CollectionRecord[]
+  images            ImageAsset[]
+  userStatus        SpeciesUserStatus?
+
+  @@map("species")
+}
+
+model SpeciesAlias {
+  id        String   @id @default(cuid())
+  speciesId String
+  alias     String
+  createdAt DateTime @default(now())
+  species   Species  @relation(fields: [speciesId], references: [id], onDelete: Cascade)
+
+  @@unique([speciesId, alias])
+  @@map("species_alias")
+}
+
+model Region {
+  id             String                      @id @default(cuid())
+  name           String
+  slug           String                      @unique
+  level          RegionLevel
+  parentId       String?
+  notes          String?
+  createdAt      DateTime                    @default(now())
+  updatedAt      DateTime                    @updatedAt
+  parent         Region?                     @relation("RegionHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children       Region[]                    @relation("RegionHierarchy")
+  distributions  SpeciesRegionDistribution[]
+  records        CollectionRecord[]
+
+  @@unique([name, level, parentId])
+  @@map("region")
+}
+
+model SpeciesRegionDistribution {
+  id          String   @id @default(cuid())
+  speciesId   String
+  regionId    String
+  isNative    Boolean  @default(true)
+  note        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  species     Species  @relation(fields: [speciesId], references: [id], onDelete: Cascade)
+  region      Region   @relation(fields: [regionId], references: [id], onDelete: Cascade)
+
+  @@unique([speciesId, regionId])
+  @@map("species_region_distribution")
+}
+
+model CollectionRecord {
+  id             String       @id @default(cuid())
+  speciesId      String
+  regionId       String
+  observedAt     DateTime
+  locationDetail String
+  status         RecordStatus
+  quantity       Int          @default(1)
+  note           String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  species        Species      @relation(fields: [speciesId], references: [id], onDelete: Cascade)
+  region         Region       @relation(fields: [regionId], references: [id], onDelete: Restrict)
+  images         ImageAsset[]
+
+  @@map("collection_record")
+}
+
+model ImageAsset {
+  id               String            @id @default(cuid())
+  speciesId        String?
+  collectionRecordId String?
+  fileName         String
+  originalName     String
+  mimeType         String
+  title            String?
+  description      String?
+  shotAt           DateTime?
+  isCover          Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  species          Species?          @relation(fields: [speciesId], references: [id], onDelete: SetNull)
+  collectionRecord CollectionRecord? @relation(fields: [collectionRecordId], references: [id], onDelete: SetNull)
+
+  @@map("image_asset")
+}
+
+model SpeciesUserStatus {
+  id                 String   @id @default(cuid())
+  speciesId          String   @unique
+  isTarget           Boolean  @default(false)
+  isPendingIdentify  Boolean  @default(false)
+  isNewDiscovery     Boolean  @default(false)
+  personalNote       String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  species            Species  @relation(fields: [speciesId], references: [id], onDelete: Cascade)
+
+  @@map("species_user_status")
+}
+
+model ImportExportLog {
+  id           String           @id @default(cuid())
+  type         ImportExportType
+  fileName     String?
+  itemCount    Int              @default(0)
+  status       String
+  message      String?
+  createdAt    DateTime         @default(now())
+
+  @@map("import_export_log")
+}
