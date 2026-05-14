@@ -1,5 +1,5 @@
 # Butterfly Collection (移动端)
-
+## 本项目的浏览器端与移动端均使用coze进行vibe coding
 本仓库是一个基于 Expo + React Native 的蝴蝶采集/记录移动端应用。
 
 ## 主要特性
