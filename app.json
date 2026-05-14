@@ -1,0 +1,72 @@
+{
+  "expo": {
+    "name": "折腰",
+    "slug": "butterfly-collection-mobile",
+    "version": "1.0.0",
+    "scheme": "butterfly-collection-mobile",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "experiments": {
+      "typedRoutes": true
+    },
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f7f8f4"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.local.butterflycollection",
+      "infoPlist": {
+        "NSCameraUsageDescription": "允许访问相机以拍摄蝴蝶照片。",
+        "NSPhotoLibraryUsageDescription": "允许访问相册以导入蝴蝶照片。",
+        "NSLocationWhenInUseUsageDescription": "允许在你主动操作时获取采集地点。"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#f7f8f4"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "package": "com.local.butterflycollection",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-secure-store",
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "允许访问相机以拍摄蝴蝶照片。",
+          "photosPermission": "允许访问相册以导入蝴蝶照片。",
+          "microphonePermission": false
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "允许在你主动操作时获取采集地点。"
+        }
+      ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7dd5e96b-69b0-4da5-9c51-e186ce5ea5dc"
+      }
+    }
+  }
+}
