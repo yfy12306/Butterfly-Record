@@ -1,4 +1,4 @@
-# 蝴蝶收藏管理网站
+# 蝴蝶收藏管理网站 Browser-V0
 
 一个基于 Next.js App Router、TypeScript、Tailwind CSS、Prisma 和 SQLite 的个人蝴蝶收藏管理项目骨架。
 
